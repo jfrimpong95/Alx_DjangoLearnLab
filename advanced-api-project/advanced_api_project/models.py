@@ -1,3 +1,5 @@
+from django.db import models
+
 # Author model represents a writer who can have multiple books
 class Author(models.Model):
     name = models.CharField(max_length=255)
