@@ -8,6 +8,8 @@ urlpatterns = [
     path('books/update', UpdateView.as_view(), name='book-update'),
     path('books/delete', DeleteView.as_view(), name='book-delete'),
 ]
+
+
 from django.contrib import admin
 from django.urls import path, include  # include must be imported
 
