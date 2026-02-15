@@ -13,3 +13,4 @@ INSTALLED_APPS = [
     # Add taggit here
     'taggit',
 ]
+  'taggit',  # <-- add this line
