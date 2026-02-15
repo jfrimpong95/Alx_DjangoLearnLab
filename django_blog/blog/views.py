@@ -182,5 +182,20 @@ def post_list(request):
         ).distinct()  # remove duplicates if multiple conditions match
 
     return render(request, 'blog/post_list.html', {'posts': posts})
+from django.views.generic import ListView
+from .models import Post
+from taggit.models import Tag
+
+class PostByTagListView(ListView):
+    model = Post
+    template_name = 'blog/post_list.html'  # reuse your post list template
+    context_object_name = 'posts'
+    
+    def get_queryset(self):
+        tag_slug = self.kwargs.get('tag_slug')
+        if tag_slug:
+            return Post.objects.filter(tags__slug__icontains=tag_slug)
+        return Post.objects.all()
+
 
 
