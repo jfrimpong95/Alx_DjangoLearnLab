@@ -1,5 +1,4 @@
 INSTALLED_APPS = [
-    # Default Django apps...
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -7,10 +6,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Your blog app
     'blog',
-
-    # Add taggit here
-    'taggit',
+    'taggit',  # <-- add this line
 ]
-  'taggit',  # <-- add this line
