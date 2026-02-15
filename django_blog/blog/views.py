@@ -166,4 +166,21 @@ def post_list(request):
 
     return render(request, 'blog/post_list.html', {'posts': posts})
 
+from django.shortcuts import render
+from .models import Post
+from django.db.models import Q  # for OR queries with filter
+
+def post_list(request):
+    query = request.GET.get('q')  # get ?q=search-term from URL
+    posts = Post.objects.all()  # default: all posts
+
+    if query:
+        posts = Post.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct()  # remove duplicates if multiple conditions match
+
+    return render(request, 'blog/post_list.html', {'posts': posts})
+
 
