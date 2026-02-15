@@ -26,6 +26,16 @@ SECRET_KEY = 'django-insecure-fb86z7sx5^o!(zv$q+8ybyj0y7$y@i3c4t2rysr+!)fue-07b0
 DEBUG = True
 
 ALLOWED_HOSTS = []
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+
+    'blog',
+    'taggit',  # <-- add this line
 
 
 # Application definition
@@ -115,3 +125,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
