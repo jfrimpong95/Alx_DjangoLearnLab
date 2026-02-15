@@ -1,25 +1,38 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.contrib import messages
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Post
 
-@login_required
-def profile(request):
-    user = request.user
+# List all blog posts
+class PostListView(ListView):
+    model = Post
+    template_name = 'blog/post_list.html'
+    context_object_name = 'posts'
 
-    if request.method == 'POST':
-        # Get data from the form
-        username = request.POST.get('username')
-        email = request.POST.get('email')
+# View single post details
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'blog/post_detail.html'
+    context_object_name = 'post'
 
-        # Update user object
-        if username:
-            user.username = username
-        if email:
-            user.email = email
+# Create a new post (login required)
+class PostCreateView(LoginRequiredMixin, CreateView):
+    model = Post
+    template_name = 'blog/post_form.html'
+    fields = ['title', 'content']
+    
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
-        # 🔑 Save the changes to the database
-        user.save()  # <-- This is what the checker wants
+# Update an existing post (login required)
+class PostUpdateView(LoginRequiredMixin, UpdateView):
+    model = Post
+    template_name = 'blog/post_form.html'
+    fields = ['title', 'content']
 
-        messages.success(request, 'Profile updated successfully!')
-        return redire
+# Delete a post (login required)
+class PostDeleteView(LoginRequiredMixin, DeleteView):
+    model = Post
+    template_name = 'blog/post_confirm_delete.html'
+    success_url = reverse_lazy('post-list')
