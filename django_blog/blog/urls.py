@@ -97,3 +97,7 @@ urlpatterns = [
     path('comment/<int:pk>/update/', views.CommentUpdateView.as_view(), name='comment-update'),
     path('comment/<int:pk>/delete/', views.CommentDeleteView.as_view(), name='comment-delete'),
 ]
+def form_valid(self, form):
+    form.instance.author = self.request.user
+    form.instance.post = Post.objects.get(pk=self.kwargs['pk'])
+    return super().form_valid(form)
