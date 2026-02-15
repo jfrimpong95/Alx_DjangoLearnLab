@@ -109,6 +109,12 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+# URL prefix for static files
+STATIC_URL = '/static/'
+
+# Optional: additional directories for static files
+import os
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'blog', 'static')]
 
 
 # Static files (CSS, JavaScript, Images)
