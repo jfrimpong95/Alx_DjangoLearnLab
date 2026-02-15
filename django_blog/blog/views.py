@@ -103,3 +103,51 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         post = self.get_object()
         return self.request.user == post.author  # only author can delete
 
+from django.views.generic import CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.urls import reverse_lazy
+from .models import Comment, Post
+
+# ----------------------
+# Create Comment
+# ----------------------
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    fields = ['content']
+    template_name = 'blog/comment_form.html'
+
+    def form_valid(self, form):
+        # Set the author to the logged-in user
+        form.instance.author = self.request.user
+        # Get the post from the URL
+        post_id = self.kwargs['post_pk']
+        form.instance.post = Post.objects.get(pk=post_id)
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.object.post.get_absolute_url()
+
+# ----------------------
+# Update Comment
+# ----------------------
+class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Comment
+    fields = ['content']
+    template_name = 'blog/comment_form.html'
+
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author  # Only the author can edit
+
+    def get_success_url(self):
+        return self.object.post.get_absolute_url()
+
+# ----------------------
+# Delete Comment
+# ----------------------
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Comment
+    template_name = 'blog/comment_confirm_delete.html'
+
+    def test_func(self):_
+
