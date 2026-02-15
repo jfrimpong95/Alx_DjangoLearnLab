@@ -84,3 +84,16 @@ urlpatterns = [
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('profile/', views.profile, name='profile'),
 ]
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    # ... your existing post URLs ...
+
+    # Comment Create URL for a specific post
+    path('post/<int:post_pk>/comments/new/', views.CommentCreateView.as_view(), name='comment-create'),
+
+    # Optional: Update and Delete URLs for comments
+    path('comment/<int:pk>/update/', views.CommentUpdateView.as_view(), name='comment-update'),
+    path('comment/<int:pk>/delete/', views.CommentDeleteView.as_view(), name='comment-delete'),
+]
