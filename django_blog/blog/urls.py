@@ -130,3 +130,10 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(template_name='blog/logout.html'), name='logout'),
     path('profile/', views.profile, name='profile'),
 ]
+from django.urls import path
+from .views import PostByTagListView
+
+urlpatterns = [
+    # ... your other URL patterns ...
+    path('tags/<slug:tag_slug>/', PostByTagListView.as_view(), name='posts_by_tag'),
+]
