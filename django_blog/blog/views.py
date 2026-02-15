@@ -150,4 +150,20 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     template_name = 'blog/comment_confirm_delete.html'
 
     def test_func(self):_
+from django.shortcuts import render
+from .models import Post
+
+def post_list(request):
+    query = request.GET.get('q')  # ?q=search-term in the URL
+    posts = Post.objects.all()
+
+    if query:
+        posts = posts.filter(
+            models.Q(title__icontains=query) |
+            models.Q(content__icontains=query) |
+            models.Q(tags__name__icontains=query)
+        ).distinct()
+
+    return render(request, 'blog/post_list.html', {'posts': posts})
+
 
