@@ -120,3 +120,9 @@ STATIC_URL = 'static/'
 USER = "admin"
 PORT = 8000
 
+
+STATIC_URL = '/static/'
+
+# Optional if you want to store static files inside the app folder
+import os
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'blog', 'static')]
