@@ -15,3 +15,10 @@ urlpatterns = [
     # Profile (optional)
     path('profile/', views.profile, name='profile'),
 ]
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    # Other auth URLs...
+    path('profile/', views.profile, name='profile'),
+]
