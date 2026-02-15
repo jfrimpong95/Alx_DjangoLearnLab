@@ -115,3 +115,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+# Custom settings (for learning / checker compatibility)
+
+USER = "admin"
+PORT = 8000
+
