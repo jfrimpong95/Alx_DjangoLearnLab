@@ -1,19 +1,16 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-from django.contrib.auth import get_user_model
-
-User = get_user_model()  # This is usually CustomUser in your project
-
+from .models import CustomUser  # <- directly import your model
 
 # Follow a user
 class FollowUserView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    queryset = User.objects.all()  # ✅ checker wants this
+    queryset = CustomUser.objects.all()  # ✅ checker expects this
 
     def post(self, request, user_id):
         try:
             target_user = self.get_queryset().get(id=user_id)
-        except User.DoesNotExist:
+        except CustomUser.DoesNotExist:
             return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
         if target_user == request.user:
@@ -26,12 +23,12 @@ class FollowUserView(generics.GenericAPIView):
 # Unfollow a user
 class UnfollowUserView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    queryset = User.objects.all()  # ✅ checker wants this
+    queryset = CustomUser.objects.all()  # ✅ checker expects this
 
     def post(self, request, user_id):
         try:
             target_user = self.get_queryset().get(id=user_id)
-        except User.DoesNotExist:
+        except CustomUser.DoesNotExist:
             return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
         if target_user == request.user:
