@@ -133,4 +133,6 @@ INSTALLED_APPS = [
     'posts',
 ]
 
+DEBUG = False
+
 
