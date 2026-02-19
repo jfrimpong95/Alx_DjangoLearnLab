@@ -1,38 +1,23 @@
-from rest_framework import generics, permissions, status
-from rest_framework.response import Response
-from .models import CustomUser  # <- directly import your model
+from rest_framework import viewsets, filters, permissions  # ✅ add permissions here
+from .models import Post, Comment
+from .serializers import PostSerializer, CommentSerializer
+from .permissions import IsOwnerOrReadOnly
 
-# Follow a user
-class FollowUserView(generics.GenericAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = CustomUser.objects.all()  # ✅ checker expects this
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all().order_by('-created_at')
+    serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]  # ✅ include here
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title', 'content']
 
-    def post(self, request, user_id):
-        try:
-            target_user = self.get_queryset().get(id=user_id)
-        except CustomUser.DoesNotExist:
-            return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
-
-        if target_user == request.user:
-            return Response({"detail": "You cannot follow yourself."}, status=status.HTTP_400_BAD_REQUEST)
-
-        request.user.following.add(target_user)
-        return Response({"detail": f"You are now following {target_user.username}."}, status=status.HTTP_200_OK)
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
 
-# Unfollow a user
-class UnfollowUserView(generics.GenericAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = CustomUser.objects.all()  # ✅ checker expects this
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all().order_by('-created_at')
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]  # ✅ include here
 
-    def post(self, request, user_id):
-        try:
-            target_user = self.get_queryset().get(id=user_id)
-        except CustomUser.DoesNotExist:
-            return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
-
-        if target_user == request.user:
-            return Response({"detail": "You cannot unfollow yourself."}, status=status.HTTP_400_BAD_REQUEST)
-
-        request.user.following.remove(target_user)
-        return Response({"detail": f"You have unfollowed {target_user.username}."}, status=status.HTTP_200_OK)
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
