@@ -128,4 +128,9 @@ INSTALLED_APPS = [
     'accounts',
 ]
 
+INSTALLED_APPS = [
+    ...
+    'posts',
+]
+
 
