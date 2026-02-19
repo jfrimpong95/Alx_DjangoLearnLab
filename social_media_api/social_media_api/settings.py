@@ -26,6 +26,10 @@ SECRET_KEY = 'django-insecure-$un04a1s@psya$--(5kovx!&v&oumchrpsx-9ze9%_*%5n%_7n
 DEBUG = True
 
 ALLOWED_HOSTS = []
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
 # Application definition
@@ -169,6 +173,7 @@ DATABASES['default'] = dj_database_url.config(
     conn_max_age=600,
     ssl_require=True
 )
+
 
 
 
